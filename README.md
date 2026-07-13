@@ -1,49 +1,186 @@
-# 💫 About Me
+<h1 align="center">Hi 👋, I'm Rishabh Verma</h1>
+<h3 align="center">AI/ML Engineer | Oracle Certified Data Science Professional | B.Tech CSE (AI)</h3>
 
-I am an **Artificial Intelligence undergraduate** and **Oracle Certified Data Science Professional** with a strong academic and hands-on foundation in **machine learning, data analysis, and AI-driven application development**.  
-I am currently pursuing a **Bachelor of Technology in Computer Science (Artificial Intelligence)** at **Babu Banarsi Das University**.
-
-### 🔹 Core Expertise
-- **Machine Learning Pipeline:** End-to-end experience in data preprocessing, feature engineering, model development, training, and performance evaluation.
-- **Technical Skills:** Proficient in **Python, SQL, Scikit-learn**, with working knowledge of **ANNs, CNNs, and RNNs**.
-- **Data Visualization & Cloud:** Skilled in **Matplotlib and Seaborn** for insights communication; familiar with deploying and scaling ML solutions on **OCI and Google Cloud Platform**.
-- **Project Experience:** Built a **Personal AI Study Companion** using **Flask** and **Google Gemini**, enabling AI-assisted learning and collaboration.
-
-🎯 I am actively seeking opportunities as a **Data Science Intern**, where I can apply my analytical skills, contribute to real-world projects, and grow as an AI professional.
+<p align="center">
+  <a href="https://github.com/rishabhverma007">
+    <img src="https://komarev.com/ghpvc/?username=rishabhverma007&label=Profile%20Views&color=0e75b6&style=flat" alt="profile views"/>
+  </a>
+</p>
 
 ---
 
-## 🌐 Connect With Me
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/rishabh321v/)
-[![Email](https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white)](mailto:rishabh300verma@gmail.com)
+## 🚀 About Me
+
+🎓 B.Tech Computer Science (Artificial Intelligence) Student
+
+🏫 Babu Banarasi Das University
+
+🤖 Passionate about Artificial Intelligence, Machine Learning, Deep Learning & Generative AI
+
+💡 Building AI products that solve real-world problems
+
+🌱 Currently learning
+
+- Advanced Deep Learning
+- MLOps
+- LLM Engineering
+- AI Agents
+- LangChain
+- Computer Vision
 
 ---
 
-## 💻 Tech Stack
-![C++](https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white)
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
-![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)
-![scikit-learn](https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white)
-![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white)
-![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white)
-![Matplotlib](https://img.shields.io/badge/Matplotlib-%23ffffff.svg?style=for-the-badge&logo=Matplotlib&logoColor=black)
-![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
-![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
+## 🛠 Tech Stack
+
+### Languages
+
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=cplusplus&logoColor=white)
+![SQL](https://img.shields.io/badge/SQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 
 ---
 
-## 📊 GitHub Statistics
+### AI / Machine Learning
 
-<!-- FIXED: total contributions now display correctly -->
-![](https://github-readme-stats.vercel.app/api?username=rishabhverma007&theme=dark&hide_border=false&include_all_commits=true&count_private=true)
+- Machine Learning
+- Deep Learning
+- Computer Vision
+- NLP
+- Large Language Models
+- Predictive Modeling
 
-![](https://nirzak-streak-stats.vercel.app/?user=rishabhverma007&theme=dark&hide_border=false)
+Libraries
 
-![](https://github-readme-stats.vercel.app/api/top-langs/?username=rishabhverma007&theme=dark&hide_border=false&layout=compact)
+- TensorFlow
+- PyTorch
+- Scikit-Learn
+- Hugging Face
+- Pandas
+- NumPy
+- OpenCV
+- MediaPipe
 
 ---
 
-[![](https://visitcount.itsvg.in/api?id=rishabhverma007&icon=0&color=0)](https://visitcount.itsvg.in)
+### Web Development
+
+- Flask
+- Django
+- REST APIs
+- Streamlit
+
+---
+
+### Cloud & Tools
+
+- Google Cloud Platform
+- Oracle Cloud Infrastructure
+- Docker
+- Git
+- GitHub
+- Ollama
+
+---
+
+# 🚀 Featured Projects
+
+## 🏋️ VisionFit AI
+
+AI-powered fitness coach using
+
+- Flask
+- OpenCV
+- MediaPipe
+- Gemini
+- Ollama
+- Llama 3
+
+Features
+
+- Real-time Pose Detection
+- AI Workout Planner
+- Diet Planner
+- Voice Assistant
+- Progress Tracking
+
+---
+
+## 📚 Personal AI Study Companion
+
+Built using
+
+- Flask
+- Google Gemini
+- Pollinations AI
+
+Features
+
+- PDF Chat
+- AI Notes
+- Group Chat
+- Study Assistant
+
+---
+
+## 🏫 College ERP System
+
+Built with
+
+- Django
+- REST Framework
+
+Features
+
+- Attendance
+- Fee Management
+- Student Dashboard
+- Analytics
+
+---
+
+# 🏆 Certifications
+
+✅ Oracle Certified Data Science Professional
+
+✅ Oracle AI Foundations Associate
+
+✅ Machine Learning (Coursera)
+
+✅ Cisco Introduction to Data Science
+
+---
+
+# 📊 GitHub Stats
+
+<p align="center">
+
+<img src="https://github-readme-stats.vercel.app/api?username=rishabhverma007&show_icons=true&theme=tokyonight"/>
+
+<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=rishabhverma007&layout=compact&theme=tokyonight"/>
+
+<img src="https://github-readme-streak-stats.herokuapp.com/?user=rishabhverma007&theme=tokyonight"/>
+
+</p>
+
+---
+
+# 📈 Contribution Graph
+
+[![Rishabh's github activity graph](https://github-readme-activity-graph.vercel.app/graph?username=rishabhverma007&theme=tokyo-night)](https://github.com/ashutosh00710/github-readme-activity-graph)
+
+---
+
+# 🤝 Connect With Me
+
+📧 Email:
+rishabh300verma@gmail.com
+
+💼 LinkedIn:
+https://linkedin.com/in/rishabhverma007
+
+💻 GitHub:
+https://github.com/rishabhverma007
+
+---
+
+⭐ *"Learning never stops. Building AI that creates real-world impact."*
