@@ -164,6 +164,54 @@ def image_to_ascii(path, cols, char_aspect=0.6, contrast=1.25, gamma=0.55):
     return rows
 
 # ----------------------------------------------------------------------------
+# GitHub Statistics Fetcher
+# ----------------------------------------------------------------------------
+def fetch_github_stats(username):
+    """
+    Fetches real-time GitHub stats from GitHub API with graceful default fallbacks.
+    """
+    stats = {
+        "repos": 34,
+        "stars": 12,
+        "commits": 1408,
+        "followers": 45,
+        "member_since": 2023,
+        "location": "India"
+    }
+    try:
+        import json
+        # Fetch user general info
+        user_url = f"https://api.github.com/users/{username}"
+        req = urllib.request.Request(
+            user_url,
+            headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+        )
+        with urllib.request.urlopen(req, timeout=5) as response:
+            data = json.loads(response.read().decode())
+            stats["repos"] = data.get("public_repos", stats["repos"])
+            stats["followers"] = data.get("followers", stats["followers"])
+            if data.get("created_at"):
+                stats["member_since"] = int(data.get("created_at")[:4])
+            if data.get("location"):
+                stats["location"] = data.get("location")
+        
+        # Fetch repos info to sum stars
+        repos_url = f"https://api.github.com/users/{username}/repos?per_page=100"
+        req_repos = urllib.request.Request(
+            repos_url,
+            headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+        )
+        with urllib.request.urlopen(req_repos, timeout=5) as response:
+            repos_data = json.loads(response.read().decode())
+            total_stars = sum(r.get("stargazers_count", 0) for r in repos_data)
+            stats["stars"] = total_stars
+            
+    except Exception as e:
+        print(f"[warning] Failed to fetch real-time GitHub stats: {e}. Using cached fallbacks.")
+        
+    return stats
+
+# ----------------------------------------------------------------------------
 # Information Parser: Parses README.md
 # ----------------------------------------------------------------------------
 def parse_readme_info(readme_path, github_username):
@@ -177,9 +225,9 @@ def parse_readme_info(readme_path, github_username):
     name = "Rishabh Verma"
     role = "AI / ML Engineer"
     education = "B.Tech CSE (Artificial Intelligence)"
-    languages = "Python, C++, SQL, JavaScript"
-    frameworks = "PyTorch, TensorFlow, OpenCV, FastAPI"
-    tools = "Docker, Git, GCP, Ollama, HuggingFace"
+    languages = "Python, C++, C, SQL, JavaScript"
+    frameworks = "TensorFlow, PyTorch, OpenCV, HuggingFace, Ollama, Gemini"
+    tools = "Docker, Git, Github, GCP, Linux, VSCode, Oracle Cloud"
     email = "rishabh300verma@gmail.com"
     linkedin = "rishabhverma007"
     github = github_username
@@ -223,6 +271,65 @@ def parse_readme_info(readme_path, github_username):
             # Parse GitHub Username from repository references
             gh_m = re.search(r"github\.com/([a-zA-Z0-9\-_]+)", content)
             if gh_m: github = gh_m.group(1).strip()
+
+            # Parse Languages from Tech Arsenal
+            lang_match = re.search(r"### Languages\s*\n\s*<img[^>]+i=([a-z0-9,]+)", content, re.IGNORECASE)
+            if lang_match:
+                lang_items = lang_match.group(1).split(",")
+                mapped = []
+                for item in lang_items:
+                    if item == "python": mapped.append("Python")
+                    elif item == "cpp": mapped.append("C++")
+                    elif item == "c": mapped.append("C")
+                    elif item == "sql": mapped.append("SQL")
+                    elif item == "js": mapped.append("JavaScript")
+                    else: mapped.append(item.capitalize())
+                languages = ", ".join(mapped)
+
+            # Parse AI & ML
+            ai_match = re.search(r"### AI & ML\s*\n(.*?)(?=\n\s*###|\n\s*<\/div>)", content, re.DOTALL | re.IGNORECASE)
+            if ai_match:
+                ai_text = ai_match.group(1)
+                skills = []
+                # Check for skillicons
+                sk_icons = re.search(r"i=([a-z0-9,]+)", ai_text, re.IGNORECASE)
+                if sk_icons:
+                    for s in sk_icons.group(1).split(","):
+                        if s == "pytorch": skills.append("PyTorch")
+                        elif s == "tensorflow": skills.append("TensorFlow")
+                        else: skills.append(s.capitalize())
+                # Check badges
+                badges = re.findall(r"badge/([a-zA-Z0-9%_\-\.\s]+)-[0-9a-fA-F]+", ai_text)
+                for b in badges:
+                    b_name = b.split("?")[0].replace("_", " ").replace("-", " ")
+                    if b_name.lower() == "google gemini": b_name = "Gemini"
+                    if b_name.lower() == "huggingface": b_name = "HuggingFace"
+                    if b_name.lower() == "opencv": b_name = "OpenCV"
+                    if b_name.lower() == "ollama": b_name = "Ollama"
+                    skills.append(b_name)
+                if skills:
+                    frameworks = ", ".join(skills)
+
+            # Parse Tools (from ### Cloud & Tools section up to the end/div)
+            tools_match = re.search(r"### Cloud & Tools\s*\n(.*?)(?=\n\s*###|\n\s*<\/div>)", content, re.DOTALL | re.IGNORECASE)
+            if tools_match:
+                tools_text = tools_match.group(1)
+                skills = []
+                # Check for skillicons
+                sk_icons = re.search(r"i=([a-z0-9,]+)", tools_text, re.IGNORECASE)
+                if sk_icons:
+                    for s in sk_icons.group(1).split(","):
+                        if s == "gcp": skills.append("GCP")
+                        elif s == "vscode": skills.append("VSCode")
+                        else: skills.append(s.capitalize())
+                # Check badges
+                badges = re.findall(r"badge/([a-zA-Z0-9%_\-\.\s]+)-[0-9a-fA-F]+", tools_text)
+                for b in badges:
+                    b_name = b.split("?")[0].replace("_", " ").replace("-", " ")
+                    if b_name.lower() == "oracle cloud": b_name = "Oracle Cloud"
+                    skills.append(b_name)
+                if skills:
+                    tools = ", ".join(skills)
             
         except Exception as e:
             print(f"[warning] Warning parsing README.md: {e}. Using defaults.")
@@ -353,7 +460,7 @@ def generate_simple_typing_svg(ascii_rows, theme_name, out_path):
     return total_time
 
 
-def generate_neofetch_profile_svg(ascii_rows, info_list, theme_name, out_path, animate_typing=True):
+def generate_neofetch_profile_svg(ascii_rows, info_list, theme_name, out_path, animate_typing=True, stats=None):
     """
     Generates a full side-by-side neofetch style card (Script B style).
     - Left side: Static ASCII art portrait (fully visible).
@@ -361,6 +468,16 @@ def generate_neofetch_profile_svg(ascii_rows, info_list, theme_name, out_path, a
     - Bottom: Blinking green terminal cursor.
     """
     t = THEMES[theme_name]
+    
+    if stats is None:
+        stats = {
+            "repos": 34,
+            "stars": 12,
+            "commits": 1408,
+            "followers": 45,
+            "member_since": 2023,
+            "location": "India"
+        }
     
     # Sizing metrics
     # ASCII Portrait dimensions
@@ -484,46 +601,55 @@ def generate_neofetch_profile_svg(ascii_rows, info_list, theme_name, out_path, a
             )
             
         elif kind == "stats1":
-            # GitHub custom mockup stats line 1
+            repos_str = str(stats["repos"])
+            stars_str = str(stats["stars"])
+            dots_repos = max(1, 8 - len(repos_str))
+            dots_stars = max(1, 8 - len(stars_str))
             tspan_body = (
                 f'<tspan class="cc">. </tspan>'
                 f'<tspan class="key">Repos</tspan>'
-                f'<tspan class="cc"> ..... </tspan>'
-                f'<tspan class="value">34</tspan>'
+                f'<tspan class="cc"> {"." * dots_repos} </tspan>'
+                f'<tspan class="value">{repos_str}</tspan>'
                 f'<tspan class="cc"> | </tspan>'
                 f'<tspan class="key">Stars</tspan>'
-                f'<tspan class="cc"> ...... </tspan>'
-                f'<tspan class="value">12</tspan>'
+                f'<tspan class="cc"> {"." * dots_stars} </tspan>'
+                f'<tspan class="value">{stars_str}</tspan>'
             )
-            char_len = 38
+            char_len = 2 + 5 + dots_repos + 2 + len(repos_str) + 3 + 5 + dots_stars + 2 + len(stars_str)
             
         elif kind == "stats2":
-            # GitHub custom mockup stats line 2
+            commits_str = f"{stats['commits']:,}"
+            followers_str = str(stats["followers"])
+            dots_commits = max(1, 6 - len(commits_str))
+            dots_followers = max(1, 4 - len(followers_str))
             tspan_body = (
                 f'<tspan class="cc">. </tspan>'
                 f'<tspan class="key">Commits</tspan>'
-                f'<tspan class="cc"> ... </tspan>'
-                f'<tspan class="value">1,408</tspan>'
+                f'<tspan class="cc"> {"." * dots_commits} </tspan>'
+                f'<tspan class="value">{commits_str}</tspan>'
                 f'<tspan class="cc"> | </tspan>'
                 f'<tspan class="key">Followers</tspan>'
-                f'<tspan class="cc"> .. </tspan>'
-                f'<tspan class="value">45</tspan>'
+                f'<tspan class="cc"> {"." * dots_followers} </tspan>'
+                f'<tspan class="value">{followers_str}</tspan>'
             )
-            char_len = 42
+            char_len = 2 + 7 + dots_commits + 2 + len(commits_str) + 3 + 9 + dots_followers + 2 + len(followers_str)
             
         elif kind == "stats3":
-            # GitHub custom mockup stats line 3
+            member_str = str(stats["member_since"])
+            loc_str = str(stats["location"])
+            dots_member = max(1, 7 - len(member_str))
+            dots_loc = max(1, 5 - len(loc_str))
             tspan_body = (
                 f'<tspan class="cc">. </tspan>'
                 f'<tspan class="key">Member</tspan>'
-                f'<tspan class="cc"> .... </tspan>'
-                f'<tspan class="value">2023</tspan>'
+                f'<tspan class="cc"> {"." * dots_member} </tspan>'
+                f'<tspan class="value">{member_str}</tspan>'
                 f'<tspan class="cc"> | </tspan>'
                 f'<tspan class="key">Location</tspan>'
-                f'<tspan class="cc"> ... </tspan>'
-                f'<tspan class="value">India</tspan>'
+                f'<tspan class="cc"> {"." * dots_loc} </tspan>'
+                f'<tspan class="value">{esc(loc_str)}</tspan>'
             )
-            char_len = 41
+            char_len = 2 + 6 + dots_member + 2 + len(member_str) + 3 + 8 + dots_loc + 2 + len(loc_str)
             
         line_px = char_len * CW
         timings.append((start_time, line_px, current_y))
@@ -688,6 +814,8 @@ def main():
     elif args.mode == "profile":
         print(f"-> Parsing details from '{args.readme}'...")
         info_list = parse_readme_info(args.readme, args.username)
+        print(f"-> Fetching GitHub stats for '{args.username}'...")
+        stats = fetch_github_stats(args.username)
         
         # Render Dark and Light mode SVGs
         for theme_name in ("dark", "light"):
@@ -698,7 +826,8 @@ def main():
                 info_list, 
                 theme_name, 
                 out_file, 
-                animate_typing=not args.no_animation
+                animate_typing=not args.no_animation,
+                stats=stats
             )
             print(f"[ok] Successfully wrote {out_file} (animation starts blinking at ~{duration:.1f}s)")
             
