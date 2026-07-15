@@ -4,7 +4,10 @@
 
 <div align="center">
 
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&height=220&color=0:050816,25:071A2F,50:7B2FF7,75:00F5FF,100:00FFB2&text=RISHABH%20VERMA&fontSize=52&fontColor=ffffff&fontAlignY=38&animation=twinkling&desc=Artificial%20Intelligence%20Engineer%20%7C%20Machine%20Learning%20%7C%20LLMs&descAlignY=60"/>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="dark_mode.svg">
+  <img alt="Rishabh Verma" src="light_mode.svg" width="100%">
+</picture>
 
 <img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=700&size=22&duration=3000&pause=1000&color=00F5FF&center=true&vCenter=true&width=850&lines=AI+Engineer;Oracle+Certified+Data+Science+Professional;Machine+Learning+%7C+Deep+Learning;Computer+Vision+%7C+LLMs;Building+AI+for+Real+World+Impact"/>
 
