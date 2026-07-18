@@ -232,10 +232,14 @@ def parse_readme_info(readme_path, github_username):
     linkedin = "rishabhverma007"
     github = github_username
     
-    projects = [
-        ("VisionFit AI", "AI Fitness Coach & Pose Detector"),
-        ("AI Study Comp", "AI Notes & PDF Chat Companion"),
-        ("College ERP", "Django Academic Management ERP")
+    specialties = [
+        ("ML", "Machine & Deep Learning"),
+        ("CV", "Computer Vision & LLMs"),
+        ("Goal", "Building AI for Real World Impact")
+    ]
+    
+    certifications = [
+        ("Oracle", "Certified Data Science Professional")
     ]
     
     if os.path.exists(readme_path):
@@ -331,6 +335,41 @@ def parse_readme_info(readme_path, github_username):
                 if skills:
                     tools = ", ".join(skills)
             
+            # Parse typing SVG lines for specialties & certifications
+            import urllib.parse
+            typing_lines = []
+            typing_match = re.search(r"readme-typing-svg\.demolab\.com[^\"]*lines=([^\"&]+)", content)
+            if typing_match:
+                raw_lines = typing_match.group(1).split(";")
+                for r_line in raw_lines:
+                    decoded = urllib.parse.unquote_plus(r_line)
+                    if decoded.strip():
+                        typing_lines.append(decoded.strip())
+            
+            parsed_specialties = []
+            parsed_certs = []
+            for line in typing_lines:
+                if "certified" in line.lower() or "certification" in line.lower():
+                    if "oracle" in line.lower():
+                        val_cert = line.replace("Oracle", "").strip()
+                        parsed_certs.append(("Oracle", val_cert))
+                    else:
+                        parsed_certs.append(("Cert", line))
+                elif "learning" in line or "vision" in line or "llm" in line.lower() or "building" in line.lower():
+                    if "learning" in line.lower():
+                        parsed_specialties.append(("ML", line.replace("|", "&")))
+                    elif "vision" in line.lower() or "llm" in line.lower():
+                        parsed_specialties.append(("CV", line.replace("|", "&")))
+                    elif "building" in line.lower():
+                        parsed_specialties.append(("Goal", line))
+                    else:
+                        parsed_specialties.append(("Specialty", line))
+            
+            if parsed_specialties:
+                specialties = parsed_specialties
+            if parsed_certs:
+                certifications = parsed_certs
+            
         except Exception as e:
             print(f"[warning] Warning parsing README.md: {e}. Using defaults.")
 
@@ -354,12 +393,21 @@ def parse_readme_info(readme_path, github_username):
         ("kv", (["LinkedIn"], linkedin)),
         ("kv", (["GitHub"], github)),
         ("blank", None),
-        ("section", "Featured Projects"),
+        ("section", "Specialties"),
     ]
     
-    # Add projects dynamically
-    for p_name, p_desc in projects:
-        info.append(("kv", (["Project", p_name.split()[0]], p_desc)))
+    # Add specialties dynamically
+    for spec_key, spec_val in specialties:
+        info.append(("kv", (["Specialty", spec_key], spec_val)))
+        
+    info.extend([
+        ("blank", None),
+        ("section", "Certifications"),
+    ])
+    
+    # Add certifications dynamically
+    for cert_key, cert_val in certifications:
+        info.append(("kv", (["Cert", cert_key], cert_val)))
         
     info.extend([
         ("blank", None),
@@ -492,16 +540,63 @@ def generate_neofetch_profile_svg(ascii_rows, info_list, theme_name, out_path, a
     pad_y = 28
     info_x = int(portrait_w + pad_x + 36) # Position of right panel
     
+    # Layout calculation helper for right panel
+    value_col = 22 # dot padding align column
+    line_duration = 0.16 # seconds to type one line
+
     # Calculate right panel dimensions
     info_rows_count = len(info_list)
     right_panel_h = info_rows_count * LH
     
-    svg_w = int(info_x + 480) # total width
+    # Calculate the max line width dynamically to set svg_w
+    max_line_px = 0
+    for kind, payload in info_list:
+        char_len = 0
+        if kind == "header":
+            dash_count = 35 - len(payload)
+            dash = "—" * max(4, dash_count)
+            char_len = len(payload) + len(dash) + 2
+        elif kind == "section":
+            dash_count = 35 - len(payload) - 2
+            dash = "—" * max(4, dash_count)
+            char_len = len(payload) + len(dash) + 4
+        elif kind == "blank":
+            char_len = 2
+        elif kind == "kv":
+            keys, value = payload
+            dots, char_len = get_dots_and_length(keys, value, value_col)
+        elif kind == "stats1":
+            repos_str = str(stats["repos"])
+            stars_str = str(stats["stars"])
+            dots_repos = max(1, 8 - len(repos_str))
+            dots_stars = max(1, 8 - len(stars_str))
+            char_len = 2 + 5 + dots_repos + 2 + len(repos_str) + 3 + 5 + dots_stars + 2 + len(stars_str)
+        elif kind == "stats2":
+            commits_str = f"{stats['commits']:,}"
+            followers_str = str(stats["followers"])
+            dots_commits = max(1, 6 - len(commits_str))
+            dots_followers = max(1, 4 - len(followers_str))
+            char_len = 2 + 7 + dots_commits + 2 + len(commits_str) + 3 + 9 + dots_followers + 2 + len(followers_str)
+        elif kind == "stats3":
+            member_str = str(stats["member_since"])
+            loc_str = str(stats["location"])
+            dots_member = max(1, 7 - len(member_str))
+            dots_loc = max(1, 5 - len(loc_str))
+            char_len = 2 + 6 + dots_member + 2 + len(member_str) + 3 + 8 + dots_loc + 2 + len(loc_str)
+        
+        line_px = char_len * CW
+        if line_px > max_line_px:
+            max_line_px = line_px
+            
+    # Also check terminal prompt width
+    prompt_text = f"{info_list[0][1].split('@')[0]}@home:~$ "
+    prompt_len = len(prompt_text)
+    prompt_px = prompt_len * CW
+    if prompt_px > max_line_px:
+        max_line_px = prompt_px
+        
+    svg_w = int(info_x + max_line_px + pad_x + 10) # total width with extra margin
     svg_h = int(max(portrait_h, right_panel_h) + pad_y * 2 + 30) # leave space for blinking cursor prompt
-    
-    # Layout calculation helper for right panel
-    value_col = 22 # dot padding align column
-    line_duration = 0.16 # seconds to type one line
     
     parts = []
     parts.append(
