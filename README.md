@@ -5,8 +5,8 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="dark_mode.svg">
-  <img alt="Rishabh Verma" src="light_mode.svg" width="100%">
+  <source media="(prefers-color-scheme: dark)" srcset="dark_mode.svg?v=2">
+  <img alt="Rishabh Verma" src="light_mode.svg?v=2" width="100%">
 </picture>
 
 <img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=700&size=22&duration=3000&pause=1000&color=00F5FF&center=true&vCenter=true&width=850&lines=AI+Engineer;Oracle+Certified+Data+Science+Professional;Machine+Learning+%7C+Deep+Learning;Computer+Vision+%7C+LLMs;Building+AI+for+Real+World+Impact"/>
